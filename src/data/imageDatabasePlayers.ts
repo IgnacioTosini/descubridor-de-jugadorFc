@@ -1,0 +1,89 @@
+import forlan from '../assets/players/forlan.png';
+import paqueta from '../assets/players/paqueta.png';
+import mascheBelgica from '../assets/players/mascheBelgica.png';
+import baleChilena from '../assets/players/baleChilena.png';
+import suarez from '../assets/players/suarez.png';
+import baggio from '../assets/players/baggio.png';
+import kubo from '../assets/players/kubo.png';
+import messi from '../assets/players/messi.png';
+import cavani from '../assets/players/cavani.png';
+import gnabry from '../assets/players/gnabry.png';
+import palmer from '../assets/players/palmer.png';
+import maradona from '../assets/players/maradona.png';
+import dibu from '../assets/players/dibu.png';
+import zidane from '../assets/players/zidane.png';
+import depay from '../assets/players/depay.png';
+import lewandowski from '../assets/players/lewandowski.png';
+import balotelli from '../assets/players/balotelli.png';
+import pique from '../assets/players/pique.png';
+import fellaini from '../assets/players/fellaini.png';
+import santiTosini from '../assets/players/santiTosini.png';
+import messiRetro from '../assets/players/messiRetro.png';
+import cristianoRonaldoRetro from '../assets/players/cristianoRonaldoRetro.png';
+import neymarPsg from '../assets/players/neymarPsg.png';
+import mbappeMonaco from '../assets/players/mbappeMonaco.png';
+import marceloFlu from '../assets/players/marceloFlu.png';
+import baleMadrid from '../assets/players/baleMadrid.png';
+import ramosEspaña from '../assets/players/ramosEspaña.png';
+import zlatanPsg from '../assets/players/zlatanPsg.png';
+import salahRapado from '../assets/players/salahRapado.webp';
+import maneBayern from '../assets/players/maneBayern.avif';
+import aguero from '../assets/players/aguero.png';
+import chiellini from '../assets/players/chiellini.png';
+import modric from '../assets/players/modric.png';
+import saneBayern from '../assets/players/saneBayern.png';
+import iniestaBarca from '../assets/players/iniestaBarca.png';
+import higuainJuve from '../assets/players/higuainJuve.png';
+import saka from '../assets/players/saka.webp';
+import yamal from '../assets/players/yamal.png';
+import kaneTote from '../assets/players/kaneTote.png';
+import cech from '../assets/players/cech.webp';
+import osimhenMascara from '../assets/players/osimhenMascara.png';
+
+type Image = {
+    src: string;
+}
+
+export const imageDatabasePlayers: Image[] = [
+    { src: forlan },
+    { src: paqueta },
+    { src: mascheBelgica },
+    { src: baleChilena },
+    { src: suarez },
+    { src: baggio },
+    { src: kubo },
+    { src: messi },
+    { src: cavani },
+    { src: gnabry },
+    { src: palmer },
+    { src: maradona },
+    { src: dibu },
+    { src: zidane },
+    { src: depay },
+    { src: lewandowski },
+    { src: balotelli },
+    { src: pique },
+    { src: fellaini },
+    { src: santiTosini },
+    { src: messiRetro },
+    { src: cristianoRonaldoRetro },
+    { src: neymarPsg },
+    { src: mbappeMonaco },
+    { src: marceloFlu },
+    { src: baleMadrid },
+    { src: ramosEspaña },
+    { src: zlatanPsg },
+    { src: salahRapado },
+    { src: maneBayern },
+    { src: aguero },
+    { src: chiellini },
+    { src: modric },
+    { src: saneBayern },
+    { src: iniestaBarca },
+    { src: higuainJuve },
+    { src: saka },
+    { src: yamal },
+    { src: kaneTote },
+    { src: cech },
+    { src: osimhenMascara }
+];

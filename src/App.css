@@ -1,0 +1,140 @@
+:root {
+  --color_1: black;
+  --background-color_1: #9fe4fff3;
+  --background-color_2: #bfff95;
+  --button-color: #4CAF50;
+  --button-hover-color: #45a049;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: var(--background-color_1);
+}
+
+.containerPokemon {
+  background-color: var(--background-color_2);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.39);
+  width: 80%;
+  max-width: 600px;
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+.imgWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.imgPokemonGuess {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.overlayContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  background-color: var(--background-color_1);
+}
+
+.overlayPrincipal {
+  position: absolute;
+  width: 90%;
+  height: 50%;
+  pointer-events: none;
+  z-index: 1;
+  top: 12%;
+  left: 7%;
+}
+
+.overlay,
+.overlay2,
+.overlay3 {
+  position: absolute;
+  top: 70%;
+  width: 40px;
+  height: 40px;
+  pointer-events: all;
+  z-index: 1;
+}
+
+@media (max-width: 405px) {
+  .overlay,
+  .overlay2,
+  .overlay3 {
+    top: 68%;
+  }
+}
+
+.overlayPrincipal,
+.overlay,
+.overlay2,
+.overlay3 {
+  border-radius: 20%;
+  backdrop-filter: blur(15px);
+  transition: opacity 1s ease;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+.overlay {
+  left: 34%;
+}
+
+.overlay2 {
+  left: 45%;
+}
+
+.overlay3 {
+  left: 56%;
+}
+
+.overlayButton {
+  display: flex;
+  justify-content: center;
+  background: none;
+  padding: 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.overlayButton:hover {
+  background-color: var(--button-hover-color);
+  transition: all 0.3s ease-in-out;
+}
+
+.randomButton {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--button-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  color: white;
+}
+
+.randomButton:hover {
+  background-color: var(--button-hover-color);
+}
