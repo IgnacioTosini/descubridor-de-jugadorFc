@@ -1,13 +1,13 @@
-import messiFC from '../assets/fc-Image/messiFC.webp';
-import salahFC from '../assets/fc-Image/salah.webp';
-import maneFc from '../assets/fc-Image/maneFc.webp';
+import { Image } from "../types";
 
-type Image = {
-    src: string;
+export async function importAllImages(): Promise<Image[]> {
+    const modules = import.meta.glob('../assets/fc-Image/*.{png,jpg,jpeg,webp}');
+    const images: Image[] = [];
+
+    for (const path in modules) {
+        const module = await modules[path]() as { default: string };
+        images.push({ src: module.default, appearance: false });
+    }
+
+    return images;
 }
-
-export const fcImages: Image[] = [
-    { src: messiFC },
-    { src: salahFC},
-    { src: maneFc},
-]
