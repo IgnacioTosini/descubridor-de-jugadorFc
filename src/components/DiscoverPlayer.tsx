@@ -6,11 +6,11 @@ import { ActionButtons } from './ActionButtons';
 import { Modal } from './Modal';
 
 export const DiscoverPlayer = () => {
-    const { playerImages, currentImageIndex, showPlayerOverlay, showCountryOverlay, showLeagueOverlay, showTeamOverlay, showModal, points, loadImages } = useStore();
+    const { playerImages, currentImageIndex, currentPage, showPlayerOverlay, showCountryOverlay, showLeagueOverlay, showTeamOverlay, showModal, points, loadImages } = useStore();
 
     useEffect(() => {
-        loadImages();
-    }, [loadImages]);
+        loadImages(currentPage);
+    }, [loadImages, currentPage]);
 
     return (
         <div className="bg-green-200 flex justify-center items-center flex-col gap-4 shadow-lg w-4/5 max-w-[600px] p-8 rounded-lg">

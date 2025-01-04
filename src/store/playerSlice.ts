@@ -8,34 +8,56 @@ export type PlayerSlice = {
     playerImages: ImagesPlayer;
     currentImageIndex: number;
     uncoveredPlayers: ImagesPlayer;
-    loadImages: () => Promise<void>;
+    currentPage: number;
+    totalPages: number;
+    loadImages: (page: number) => Promise<void>;
     showRandomImage: () => void;
+    nextPage: () => void;
+    prevPage: () => void;
 }
+
+const IMAGES_PER_PAGE = 10;
+
+const shuffleArray = (array: ImagesPlayer) => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+};
 
 export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [], PlayerSlice> = (set, get) => ({
     playerImages: [],
     currentImageIndex: 0,
     uncoveredPlayers: [],
-    loadImages: async () => {
+    currentPage: 1,
+    totalPages: 0,
+    loadImages: async (page = 1) => {
         const images = await importAllImages();
         const parsedImages = ImagesSchema.parse(images);
-        const randomIndex = Math.floor(Math.random() * parsedImages.length);
-        set({ playerImages: parsedImages, currentImageIndex: randomIndex });
+        const shuffledImages = shuffleArray(parsedImages);
+        const totalPages = Math.ceil(shuffledImages.length / IMAGES_PER_PAGE);
+        const startIndex = (page - 1) * IMAGES_PER_PAGE;
+        const endIndex = startIndex + IMAGES_PER_PAGE;
+        const imagesForPage = shuffledImages.slice(startIndex, endIndex);
+        const randomIndex = Math.floor(Math.random() * imagesForPage.length);
+        set({ playerImages: imagesForPage, currentImageIndex: randomIndex, totalPages, currentPage: page });
     },
     showRandomImage: () => {
-        const { playerImages, currentImageIndex, playerOverlayUsed, countryOverlayUsed, leagueOverlayUsed, teamOverlayUsed, points } = get();
-        if (playerImages.every(image => image.appearance)) {
-            set({ showModal: true });
-            return;
+        const { playerImages, currentImageIndex, playerOverlayUsed, countryOverlayUsed, leagueOverlayUsed, teamOverlayUsed, points, currentPage, totalPages, loadImages } = get();
+        const availableImages = playerImages.filter(image => !image.appearance);
+
+        if (availableImages.length === 0) {
+            if (currentPage < totalPages) {
+                loadImages(currentPage + 1);
+                return;
+            } else {
+                set({ showModal: true });
+                return;
+            }
         }
 
         let randomIndex;
-        const availableImages = playerImages.filter(image => !image.appearance);
-        if (availableImages.length === 0) {
-            set({ showModal: true });
-            return;
-        }
-
         let seed = Math.floor(Math.random() * Date.now());
         const seededRandom = (min: number, max: number) => {
             const x = Math.sin(seed++) * 10000;
@@ -80,6 +102,12 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
                 leagueOverlayDisabled: false,
                 teamOverlayDisabled: false,
             });
+
+            // Check if all images in the current page are uncovered and load the next page if necessary
+            const { playerImages: updatedPlayerImages, currentPage: updatedCurrentPage, totalPages: updatedTotalPages } = get();
+            if (updatedPlayerImages.every(image => image.appearance) && updatedCurrentPage < updatedTotalPages) {
+                loadImages(updatedCurrentPage + 1);
+            }
         }, 3000);
 
         setTimeout(() => {
@@ -90,5 +118,17 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
                 showTeamOverlay: true,
             });
         }, 2000);
+    },
+    nextPage: () => {
+        const { currentPage, totalPages, loadImages } = get();
+        if (currentPage < totalPages) {
+            loadImages(currentPage + 1);
+        }
+    },
+    prevPage: () => {
+        const { currentPage, loadImages } = get();
+        if (currentPage > 1) {
+            loadImages(currentPage - 1);
+        }
     },
 });
