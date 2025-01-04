@@ -15,7 +15,7 @@ body {
   background-color: var(--background-color_1);
 }
 
-.containerPokemon {
+.containerPlayer {
   background-color: var(--background-color_2);
   background-size: cover;
   background-position: center;
@@ -37,7 +37,7 @@ body {
   width: 100%;
 }
 
-.imgPokemonGuess {
+.imgPlayerGuess {
   width: 100%;
   max-width: 100%;
   max-width: 386px;
@@ -75,11 +75,20 @@ body {
   z-index: 1;
 }
 
+
+@media (max-width: 455px) {
+  .overlay,
+  .overlay2,
+  .overlay3 {
+    top: 70%;
+  }
+}
+
 @media (max-width: 405px) {
   .overlay,
   .overlay2,
   .overlay3 {
-    top: 67%;
+    top: 68%;
   }
   .overlayPrincipal {
     top: 10%;
@@ -145,7 +154,14 @@ body {
   transition: all 0.3s ease-in-out;
 }
 
-.randomButton {
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.correctButton {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   background-color: var(--button-color);
@@ -156,8 +172,19 @@ body {
   color: white;
 }
 
-.randomButton:hover {
+.correctButton:hover {
   background-color: var(--button-hover-color);
+}
+
+.incorrectButton {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: red;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  color: white;
 }
 
 .modal {
