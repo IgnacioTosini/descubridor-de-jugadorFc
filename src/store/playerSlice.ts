@@ -41,6 +41,9 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
         const endIndex = startIndex + IMAGES_PER_PAGE;
         const imagesForPage = shuffledImages.slice(startIndex, endIndex);
         const randomIndex = Math.floor(Math.random() * imagesForPage.length);
+        
+        console.log('Loaded images for page', page, imagesForPage); // Agrega este console.log para depurar
+
         set({ playerImages: imagesForPage, currentImageIndex: randomIndex, totalPages, currentPage: page });
     },
     showRandomImage: () => {

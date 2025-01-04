@@ -7,4 +7,5 @@ export default defineConfig({
   plugins: [react(),
   dynamicImport()
   ],
+  assetsInclude: ['**/*.webp', '**/*.png', '**/*.jpg', '**/*.jpeg'],
 })
