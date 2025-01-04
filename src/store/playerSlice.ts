@@ -7,6 +7,7 @@ import { OverlaySlice } from './overlaySlice';
 export type PlayerSlice = {
     playerImages: ImagesPlayer;
     currentImageIndex: number;
+    uncoveredPlayers: ImagesPlayer;
     loadImages: () => Promise<void>;
     showRandomImage: () => void;
 }
@@ -14,6 +15,7 @@ export type PlayerSlice = {
 export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [], PlayerSlice> = (set, get) => ({
     playerImages: [],
     currentImageIndex: 0,
+    uncoveredPlayers: [],
     loadImages: async () => {
         const images = await importAllImages();
         const parsedImages = ImagesSchema.parse(images);
@@ -21,7 +23,7 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
         set({ playerImages: parsedImages, currentImageIndex: randomIndex });
     },
     showRandomImage: () => {
-        const { playerImages, playerOverlayUsed, countryOverlayUsed, leagueOverlayUsed, teamOverlayUsed, points } = get();
+        const { playerImages, currentImageIndex, playerOverlayUsed, countryOverlayUsed, leagueOverlayUsed, teamOverlayUsed, points } = get();
         if (playerImages.every(image => image.appearance)) {
             set({ showModal: true });
             return;
@@ -54,8 +56,9 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
         setTimeout(() => {
             set(state => {
                 const newImages = [...state.playerImages];
-                newImages[randomIndex].appearance = true;
-                return { playerImages: newImages, currentImageIndex: randomIndex };
+                newImages[currentImageIndex].appearance = true;
+                const newUncoveredPlayers = [...state.uncoveredPlayers, newImages[currentImageIndex]];
+                return { playerImages: newImages, currentImageIndex: randomIndex, uncoveredPlayers: newUncoveredPlayers };
             });
 
             // Calculate and set points

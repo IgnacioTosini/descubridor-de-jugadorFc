@@ -17,9 +17,6 @@ body {
 
 .containerPlayer {
   background-color: var(--background-color_2);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;

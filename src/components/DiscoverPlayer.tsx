@@ -1,76 +1,40 @@
 import { useEffect } from "react";
 import { useStore } from '../store/useStore';
+import { PlayerImage } from './PlayerImage';
+import { OverlayButton } from './OverlayButton';
+import { ActionButtons } from './ActionButtons';
+import { Modal } from './Modal';
 
 export const DiscoverPlayer = () => {
-    const {
-        playerImages,
-        currentImageIndex,
-        showPlayerOverlay,
-        showCountryOverlay,
-        showLeagueOverlay,
-        showTeamOverlay,
-        showModal,
-        points,
-        loadImages,
-        togglePlayerOverlay,
-        toggleCountryOverlay,
-        toggleLeagueOverlay,
-        toggleTeamOverlay,
-        showRandomImage,
-        handleCloseModal,
-        handleIncorrect,
-        playerOverlayDisabled,
-        countryOverlayDisabled,
-        leagueOverlayDisabled,
-        teamOverlayDisabled,
-    } = useStore();
+    const { playerImages, currentImageIndex, showPlayerOverlay, showCountryOverlay, showLeagueOverlay, showTeamOverlay, showModal, points, loadImages } = useStore();
 
     useEffect(() => {
         loadImages();
     }, [loadImages]);
 
     return (
-        <div className="containerPlayer">
-            <div className="imgWrapper">
+        <div className="bg-green-200 flex justify-center items-center flex-col gap-4 shadow-lg w-4/5 max-w-[600px] p-8 rounded-lg">
+            <div className="relative w-full">
                 {playerImages.length > 0 && (
-                    <img src={playerImages[currentImageIndex].src} className="imgPlayerGuess" />
+                    <PlayerImage
+                        playerImages={playerImages}
+                        currentImageIndex={currentImageIndex}
+                        showPlayerOverlay={showPlayerOverlay}
+                        showCountryOverlay={showCountryOverlay}
+                        showLeagueOverlay={showLeagueOverlay}
+                        showTeamOverlay={showTeamOverlay}
+                    />
                 )}
-                <div className={`overlayPrincipal ${showPlayerOverlay ? 'fade-in' : 'fade-out'}`}></div>
-                <div className={`overlay ${showCountryOverlay ? 'fade-in' : 'fade-out'}`}></div>
-                <div className={`overlay2 ${showLeagueOverlay ? 'fade-in' : 'fade-out'}`}></div>
-                <div className={`overlay3 ${showTeamOverlay ? 'fade-in' : 'fade-out'}`}></div>
-                <div className="overlayContainer">
-                    <div className="containerButton">
-                        <button className="overlayButton" onClick={togglePlayerOverlay} disabled={playerOverlayDisabled}>Sacar imagen</button>
-                        <span className="remaining">(-5)</span>
-                    </div>
-                    <div className="containerButton">
-                        <button className="overlayButton" onClick={toggleCountryOverlay} disabled={countryOverlayDisabled}>Sacar Pais</button>
-                        <span className="remaining">(-1)</span>
-                    </div>
-                    <div className="containerButton">
-                        <button className="overlayButton" onClick={toggleLeagueOverlay} disabled={leagueOverlayDisabled}>Sacar Liga</button>
-                        <span className="remaining">(-2)</span>
-                    </div>
-                    <div className="containerButton">
-                        <button className="overlayButton" onClick={toggleTeamOverlay} disabled={teamOverlayDisabled}>Sacar Equipo</button>
-                        <span className="remaining">(-2)</span>
-                    </div>
+                <div className="flex justify-around items-center w-full bg-blue-200">
+                    <OverlayButton type="player" text="Sacar imagen" cost="-5" />
+                    <OverlayButton type="country" text="Sacar Pais" cost="-1" />
+                    <OverlayButton type="league" text="Sacar Liga" cost="-2" />
+                    <OverlayButton type="team" text="Sacar Equipo" cost="-2" />
                 </div>
             </div>
-            <div className="buttonContainer">
-                <button className="incorrectButton" onClick={handleIncorrect}>Incorrecto</button>
-                <button className="correctButton" onClick={showRandomImage}>Correcto</button>
-            </div>
-            <div className="points">Puntos: {points}</div>
-            {showModal && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <span className="close" onClick={handleCloseModal}>&times;</span>
-                        <p>Se han mostrado todas las imágenes.</p>
-                    </div>
-                </div>
-            )}
+            <ActionButtons />
+            <div className="text-lg">Puntos: {points}</div>
+            <Modal showModal={showModal} />
         </div>
     );
 };
