@@ -10,6 +10,7 @@ export type PlayerSlice = {
     uncoveredPlayers: ImagesPlayer;
     currentPage: number;
     totalPages: number;
+    recentImages: string[]; // Historial de imágenes recientes
     loadImages: (page: number) => Promise<void>;
     showRandomImage: () => void;
     nextPage: () => void;
@@ -17,6 +18,7 @@ export type PlayerSlice = {
 }
 
 const IMAGES_PER_PAGE = 10;
+const RECENT_IMAGES_LIMIT = 5; // Número de imágenes recientes a mantener en el historial
 
 const shuffleArray = (array: ImagesPlayer) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -32,8 +34,9 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
     uncoveredPlayers: [],
     currentPage: 1,
     totalPages: 0,
+    recentImages: [],
     loadImages: async (page = 1) => {
-        const images = await importAllImages();
+        const images = await importAllImages(IMAGES_PER_PAGE * 5); // Cargar 5 páginas de imágenes aleatorias
         const parsedImages = ImagesSchema.parse(images);
         const shuffledImages = shuffleArray(parsedImages);
         const totalPages = Math.ceil(shuffledImages.length / IMAGES_PER_PAGE);
@@ -47,7 +50,7 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
         set({ playerImages: imagesForPage, currentImageIndex: randomIndex, totalPages, currentPage: page });
     },
     showRandomImage: () => {
-        const { playerImages, currentImageIndex, playerOverlayUsed, countryOverlayUsed, leagueOverlayUsed, teamOverlayUsed, points, currentPage, totalPages, loadImages } = get();
+        const { playerImages, currentImageIndex, playerOverlayUsed, countryOverlayUsed, leagueOverlayUsed, teamOverlayUsed, points, currentPage, totalPages, loadImages, recentImages } = get();
         const availableImages = playerImages.filter(image => !image.appearance);
 
         if (availableImages.length === 0) {
@@ -69,7 +72,7 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
 
         do {
             randomIndex = seededRandom(0, playerImages.length);
-        } while (playerImages[randomIndex].appearance);
+        } while (playerImages[randomIndex].appearance || recentImages.includes(playerImages[randomIndex].src));
 
         set({
             showPlayerOverlay: false,
@@ -83,7 +86,14 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
                 const newImages = [...state.playerImages];
                 newImages[currentImageIndex].appearance = true;
                 const newUncoveredPlayers = [...state.uncoveredPlayers, newImages[currentImageIndex]];
-                return { playerImages: newImages, currentImageIndex: randomIndex, uncoveredPlayers: newUncoveredPlayers };
+
+                // Actualizar el historial de imágenes recientes
+                const newRecentImages = [...state.recentImages, newImages[currentImageIndex].src];
+                if (newRecentImages.length > RECENT_IMAGES_LIMIT) {
+                    newRecentImages.shift(); // Eliminar la imagen más antigua si se supera el límite
+                }
+
+                return { playerImages: newImages, currentImageIndex: randomIndex, uncoveredPlayers: newUncoveredPlayers, recentImages: newRecentImages };
             });
 
             // Calculate and set points
