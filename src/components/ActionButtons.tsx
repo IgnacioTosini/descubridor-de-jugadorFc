@@ -1,7 +1,7 @@
 import { useStore } from '../store/useStore';
 
 export const ActionButtons = () => {
-    const { handleIncorrect, showRandomImage } = useStore();
+    const { handleIncorrect, showRandomImage, isCorrectButtonDisabled } = useStore();
 
     return (
         <div className="flex justify-center items-center gap-4">
@@ -11,8 +11,9 @@ export const ActionButtons = () => {
             >Incorrecto
             </button>
             <button
-                className="mt-4 p-2 bg-green-500 border-none rounded-md cursor-pointer transition-bg duration-300 text-white hover:bg-green-600"
+                className={`mt-4 p-2 bg-green-500 border-none rounded-md cursor-pointer transition-bg duration-300 text-white ${isCorrectButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600'}`}
                 onClick={showRandomImage}
+                disabled={isCorrectButtonDisabled}
             >Correcto
             </button>
         </div>

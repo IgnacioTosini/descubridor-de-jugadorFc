@@ -11,6 +11,7 @@ export type PlayerSlice = {
     currentPage: number;
     totalPages: number;
     recentImages: string[]; // Historial de imágenes recientes
+    isCorrectButtonDisabled: boolean;
     loadImages: (page: number) => Promise<void>;
     showRandomImage: () => void;
     nextPage: () => void;
@@ -35,6 +36,7 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
     currentPage: 1,
     totalPages: 0,
     recentImages: [],
+    isCorrectButtonDisabled: false,
     loadImages: async (page = 1) => {
         const images = await importAllImages(IMAGES_PER_PAGE * 5); // Cargar 5 páginas de imágenes aleatorias
         const parsedImages = ImagesSchema.parse(images);
@@ -44,7 +46,7 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
         const endIndex = startIndex + IMAGES_PER_PAGE;
         const imagesForPage = shuffledImages.slice(startIndex, endIndex);
         const randomIndex = Math.floor(Math.random() * imagesForPage.length);
-        
+
         console.log('Loaded images for page', page, imagesForPage); // Agrega este console.log para depurar
 
         set({ playerImages: imagesForPage, currentImageIndex: randomIndex, totalPages, currentPage: page });
@@ -79,6 +81,7 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
             showCountryOverlay: false,
             showLeagueOverlay: false,
             showTeamOverlay: false,
+            isCorrectButtonDisabled: true,
         });
 
         setTimeout(() => {
@@ -93,7 +96,7 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
                     newRecentImages.shift(); // Eliminar la imagen más antigua si se supera el límite
                 }
 
-                return { playerImages: newImages, currentImageIndex: randomIndex, uncoveredPlayers: newUncoveredPlayers, recentImages: newRecentImages };
+                return { playerImages: newImages, currentImageIndex: randomIndex, uncoveredPlayers: newUncoveredPlayers, recentImages: newRecentImages, isCorrectButtonDisabled: false };
             });
 
             // Calculate and set points
