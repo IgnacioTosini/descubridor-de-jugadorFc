@@ -3,7 +3,7 @@ import { useStore } from "../store/useStore"
 export const InfoContainer = () => {
     const uncoveredPlayers = useStore(state => state.uncoveredPlayers)
     return (
-        <div className="w-64 p-4 bg-white shadow-lg rounded-lg text-center mb-5">
+        <div className="w-full max-w-xs p-4 bg-white shadow-lg rounded-lg text-center mb-5">
             <p className="text-lg font-semibold mb-2">Lista de Jugadores Descubiertos</p>
             <p className="text-sm mb-2">Total: {uncoveredPlayers.length}</p>
             <ul className="list-none overflow-y-scroll max-h-60 space-y-2 scrollbar-hide">
