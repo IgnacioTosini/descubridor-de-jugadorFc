@@ -13,7 +13,7 @@ export const DiscoverPlayer = () => {
     }, [loadImages, currentPage]);
 
     return (
-        <div className="bg-green-200 flex justify-center items-center flex-col gap-4 shadow-lg w-4/5 max-w-[600px] p-8 rounded-lg">
+        <div className=" flex justify-center items-center flex-col gap-4 shadow-lg w-4/5 max-w-[600px] p-8 rounded-lg">
             <div className="relative w-full">
                 {playerImages.length > 0 && (
                     <PlayerImage
