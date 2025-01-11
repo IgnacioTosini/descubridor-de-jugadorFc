@@ -14,6 +14,7 @@ export type PlayerSlice = {
     isCorrectButtonDisabled: boolean;
     loadImages: (page: number) => Promise<void>;
     showRandomImage: () => void;
+    reloadImage: () => void;
     nextPage: () => void;
     prevPage: () => void;
 }
@@ -134,6 +135,13 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
                 showTeamOverlay: true,
             });
         }, 2000);
+    },
+    reloadImage: () => {
+        const { playerImages } = get();
+        if (playerImages.length > 0) {
+            const randomIndex = Math.floor(Math.random() * playerImages.length);
+            set({ currentImageIndex: randomIndex });
+        }
     },
     nextPage: () => {
         const { currentPage, totalPages, loadImages } = get();
