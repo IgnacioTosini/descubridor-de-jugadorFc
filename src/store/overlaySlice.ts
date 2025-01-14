@@ -24,6 +24,7 @@ export type OverlaySlice = {
     handleCloseModal: () => void;
     handleIncorrect: () => void;
     setShowModal: (show: boolean) => void;
+    resetPoints: () => void;
 }
 
 export const createOverlaySlice: StateCreator<OverlaySlice & PlayerSlice, [], [], OverlaySlice> = (set, get) => ({
@@ -72,4 +73,9 @@ export const createOverlaySlice: StateCreator<OverlaySlice & PlayerSlice, [], []
     setShowModal: (show: boolean) => {
         set({ showModal: show });
     },
+    resetPoints: () => {
+        set({
+            points: 0
+        })
+    }
 });

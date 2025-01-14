@@ -13,21 +13,25 @@ export const DiscoverPlayer = () => {
         loadImages(currentPage);
     }, [loadImages, currentPage]);
 
+    const uncoveredPlayersCount = playerImages.filter(image => !image.appearance).length;
+
     return (
-        <div className=" flex justify-center items-center flex-col gap-4 shadow-lg w-4/5 max-w-[600px] p-8 rounded-lg">
+        <div className="flex justify-center items-center flex-col gap-4 shadow-lg w-4/5 max-w-[600px] p-8 rounded-lg">
             <div className="relative w-full">
                 {playerImages.length > 0 ? (
-                    <PlayerImage
-                        playerImages={playerImages}
-                        currentImageIndex={currentImageIndex}
-                        showPlayerOverlay={showPlayerOverlay}
-                        showNameOverlay={showNameOverlay}
-                        showCountryOverlay={showCountryOverlay}
-                        showLeagueOverlay={showLeagueOverlay}
-                        showTeamOverlay={showTeamOverlay}
-                    />
-                ) :
-                (
+                    <div>
+                        <p className="text-center mb-2">Jugadores restantes por descubrir: {uncoveredPlayersCount}</p>
+                        <PlayerImage
+                            playerImages={playerImages}
+                            currentImageIndex={currentImageIndex}
+                            showPlayerOverlay={showPlayerOverlay}
+                            showNameOverlay={showNameOverlay}
+                            showCountryOverlay={showCountryOverlay}
+                            showLeagueOverlay={showLeagueOverlay}
+                            showTeamOverlay={showTeamOverlay}
+                        />
+                    </div>
+                ) : (
                     <Spinner />
                 )}
                 <div className="flex justify-around items-center w-full bg-blue-200">
