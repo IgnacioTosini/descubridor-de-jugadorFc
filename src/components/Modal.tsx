@@ -7,7 +7,7 @@ type ModalProps = {
 }
 
 export const Modal = ({ showModal }: ModalProps) => {
-    const { setShowModal, playerImages } = useStore();
+    const { setShowModal, allPlayersDiscovered } = useStore();
 
     useEffect(() => {
         setShowModal(true);
@@ -19,8 +19,6 @@ export const Modal = ({ showModal }: ModalProps) => {
 
     if (!showModal) return null;
 
-    const allPlayersDiscovered = playerImages.every(image => image.appearance);
-
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
@@ -28,6 +26,9 @@ export const Modal = ({ showModal }: ModalProps) => {
                     <div>
                         <h2 className="text-2xl font-bold mb-4 text-center">¡Felicidades!</h2>
                         <p className="mb-4 text-center">Has descubierto todos los jugadores.</p>
+                        <div className="flex justify-center mt-4">
+                            <button className="bg-green-500 text-white p-2 rounded" onClick={handleClose}>Cerrar</button>
+                        </div>
                     </div>
                 ) : (
                     <div>
@@ -72,11 +73,11 @@ export const Modal = ({ showModal }: ModalProps) => {
                                 <p className="ml-2">Cambia la imagen actual por una nueva (por si la imagen actual ya ha salido).</p>
                             </div>
                         </div>
+                        <div className="flex justify-center mt-4">
+                            <button className="bg-green-500 text-white p-2 rounded" onClick={handleClose}>Cerrar</button>
+                        </div>
                     </div>
                 )}
-                <div className="flex justify-center mt-4">
-                    <button className="bg-green-500 text-white p-2 rounded" onClick={handleClose}>Cerrar</button>
-                </div>
             </div>
         </div>
     );

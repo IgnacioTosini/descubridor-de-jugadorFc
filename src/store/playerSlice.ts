@@ -13,6 +13,7 @@ export type PlayerSlice = {
     recentImages: string[]; // Historial de imágenes recientes
     isCorrectButtonDisabled: boolean;
     isLoading: boolean; // Estado para controlar la visibilidad del Spinner
+    allPlayersDiscovered: boolean; // Estado para controlar si todos los jugadores han sido descubiertos
     loadImages: (page: number) => Promise<void>;
     showRandomImage: () => void;
     reloadImage: () => void;
@@ -30,6 +31,7 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
     recentImages: [],
     isCorrectButtonDisabled: false,
     isLoading: false, // Inicializar el estado isLoading
+    allPlayersDiscovered: false, // Inicializar el estado allPlayersDiscovered
     loadImages: async (page = 1) => {
         const images = await importAllImages(IMAGES_PER_PAGE * 5); // Cargar 5 páginas de imágenes aleatorias
         const parsedImages = ImagesSchema.parse(images);
@@ -41,7 +43,7 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
 
         console.log('Loaded images for page', page, imagesForPage); // Agrega este console.log para depurar
 
-        set({ playerImages: imagesForPage, currentImageIndex: randomIndex, totalPages, currentPage: page });
+        set({ playerImages: imagesForPage, currentImageIndex: randomIndex, totalPages, currentPage: page, allPlayersDiscovered: false });
     },
     showRandomImage: () => {
         const { playerImages, currentImageIndex, playerOverlayUsed, countryOverlayUsed, leagueOverlayUsed, teamOverlayUsed, points, currentPage, totalPages, loadImages, recentImages } = get();
@@ -52,7 +54,7 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
                 loadImages(currentPage + 1);
                 return;
             } else {
-                set({ showModal: true });
+                set({ showModal: true, allPlayersDiscovered: true });
                 return;
             }
         }
