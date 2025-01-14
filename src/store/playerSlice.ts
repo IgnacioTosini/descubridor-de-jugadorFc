@@ -15,20 +15,10 @@ export type PlayerSlice = {
     loadImages: (page: number) => Promise<void>;
     showRandomImage: () => void;
     reloadImage: () => void;
-    nextPage: () => void;
-    prevPage: () => void;
 }
 
 const IMAGES_PER_PAGE = 10;
 const RECENT_IMAGES_LIMIT = 5; // Número de imágenes recientes a mantener en el historial
-
-const shuffleArray = (array: ImagesPlayer) => {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-};
 
 export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [], PlayerSlice> = (set, get) => ({
     playerImages: [],
@@ -41,11 +31,10 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
     loadImages: async (page = 1) => {
         const images = await importAllImages(IMAGES_PER_PAGE * 5); // Cargar 5 páginas de imágenes aleatorias
         const parsedImages = ImagesSchema.parse(images);
-        const shuffledImages = shuffleArray(parsedImages);
-        const totalPages = Math.ceil(shuffledImages.length / IMAGES_PER_PAGE);
+        const totalPages = Math.ceil(parsedImages.length / IMAGES_PER_PAGE);
         const startIndex = (page - 1) * IMAGES_PER_PAGE;
         const endIndex = startIndex + IMAGES_PER_PAGE;
-        const imagesForPage = shuffledImages.slice(startIndex, endIndex);
+        const imagesForPage = parsedImages.slice(startIndex, endIndex);
         const randomIndex = Math.floor(Math.random() * imagesForPage.length);
 
         console.log('Loaded images for page', page, imagesForPage); // Agrega este console.log para depurar
@@ -67,18 +56,13 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
         }
 
         let randomIndex;
-        let seed = Math.floor(Math.random() * Date.now());
-        const seededRandom = (min: number, max: number) => {
-            const x = Math.sin(seed++) * 10000;
-            return Math.floor((x - Math.floor(x)) * (max - min) + min);
-        };
-
         do {
-            randomIndex = seededRandom(0, playerImages.length);
+            randomIndex = Math.floor(Math.random() * playerImages.length);
         } while (playerImages[randomIndex].appearance || recentImages.includes(playerImages[randomIndex].src));
 
         set({
             showPlayerOverlay: false,
+            showNameOverlay: false,
             showCountryOverlay: false,
             showLeagueOverlay: false,
             showTeamOverlay: false,
@@ -130,6 +114,7 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
         setTimeout(() => {
             set({
                 showPlayerOverlay: true,
+                showNameOverlay: true,
                 showCountryOverlay: true,
                 showLeagueOverlay: true,
                 showTeamOverlay: true,
@@ -137,22 +122,31 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
         }, 2000);
     },
     reloadImage: () => {
-        const { playerImages } = get();
-        if (playerImages.length > 0) {
-            const randomIndex = Math.floor(Math.random() * playerImages.length);
-            set({ currentImageIndex: randomIndex });
+        const { playerImages, currentImageIndex } = get();
+        const availableImages = playerImages.filter(image => !image.appearance);
+
+        if (availableImages.length > 0) {
+            const nextIndex = (currentImageIndex + 1) % playerImages.length;
+            setTimeout(() => {
+                set({ currentImageIndex: nextIndex, isCorrectButtonDisabled: playerImages[nextIndex].appearance });
+            }, 1500);
+        } else {
+            set({ isCorrectButtonDisabled: true });
         }
-    },
-    nextPage: () => {
-        const { currentPage, totalPages, loadImages } = get();
-        if (currentPage < totalPages) {
-            loadImages(currentPage + 1);
-        }
-    },
-    prevPage: () => {
-        const { currentPage, loadImages } = get();
-        if (currentPage > 1) {
-            loadImages(currentPage - 1);
-        }
-    },
+        set({
+            showPlayerOverlay: true,
+            showNameOverlay: true,
+            showCountryOverlay: true,
+            showLeagueOverlay: true,
+            showTeamOverlay: true,
+            playerOverlayUsed: false,
+            countryOverlayUsed: false,
+            leagueOverlayUsed: false,
+            teamOverlayUsed: false,
+            playerOverlayDisabled: false,
+            countryOverlayDisabled: false,
+            leagueOverlayDisabled: false,
+            teamOverlayDisabled: false,
+        });
+    }
 });

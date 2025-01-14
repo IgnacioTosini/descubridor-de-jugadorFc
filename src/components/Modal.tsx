@@ -1,26 +1,62 @@
+import { useEffect } from 'react';
 import { useStore } from '../store/useStore';
 
 type ModalProps = {
-    showModal: boolean
+    showModal: boolean;
 }
 
 export const Modal = ({ showModal }: ModalProps) => {
-    const { handleCloseModal } = useStore();
+    const { setShowModal } = useStore();
+
+    useEffect(() => {
+        setShowModal(true);
+    }, [setShowModal]);
+
+    const handleClose = () => {
+        setShowModal(false);
+    };
+
+    if (!showModal) return null;
 
     return (
-        showModal && (
-            <div
-                className="fixed flex justify-center items-center z-[1000] left-0 top-0 w-full h-full bg-black bg-opacity-50">
-                <div
-                    className="bg-white p-5 rounded-lg shadow-lg w-[90%] max-w-[500px] text-center animate-fadeIn">
-                    <span
-                        className="text-gray-500 float-right text-2xl font-bold cursor-pointer"
-                        onClick={handleCloseModal}
-                    >&times;
-                    </span>
-                    <p className="text-lg">Se han mostrado todas las imágenes.</p>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+                <h2 className="text-2xl font-bold mb-4 text-center">Cómo jugar</h2>
+                <p className="mb-4">Aquí hay una breve explicación de cómo funciona el juego y qué hace cada botón:</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center mb-4">
+                        <p className="ml-2 bg-blue-400 p-4 rounded text-center">Sacar imagen</p>
+                        <p className="ml-2">Muestra la imagen del jugador y resta 5 puntos.</p>
+                    </div>
+                    <div className="flex items-center mb-4">
+                        <p className="ml-2 bg-blue-400 p-4 rounded text-center">Sacar País</p>
+                        <p className="ml-2">Muestra el país del jugador y resta 1 punto.</p>
+                    </div>
+                    <div className="flex items-center mb-4">
+                        <p className="ml-2 bg-blue-400 p-4 rounded text-center">Sacar Liga</p>
+                        <p className="ml-2">Muestra la liga del jugador y resta 2 puntos.</p>
+                    </div>
+                    <div className="flex items-center mb-4">
+                        <p className="ml-2 bg-blue-400 p-4 rounded text-center">Sacar Equipo</p>
+                        <p className="ml-2">Muestra el equipo del jugador y resta 2 puntos.</p>
+                    </div>
+                    <div className="flex items-center mb-4">
+                        <button className="bg-red-500 text-white p-2 rounded mr-2" disabled>Incorrecto</button>
+                        <p className="ml-2">Resta 5 puntos.</p>
+                    </div>
+                    <div className="flex items-center mb-4">
+                        <button className="bg-green-500 text-white p-2 rounded mr-2" disabled>Correcto</button>
+                        <p className="ml-2">Marca la imagen como correcta y suma puntos.</p>
+                    </div>
+                    <div className="flex items-center mb-4">
+                        <button className="bg-blue-500 text-white p-2 rounded mr-2" disabled>Recargar</button>
+                        <p className="ml-2">Cambia la imagen actual por una nueva (Por si la imagen actual ya ha salido).</p>
+                    </div>
+                </div>
+                <div className="flex justify-center mt-4">
+                    <button className="bg-green-500 text-white p-2 rounded" onClick={handleClose}>Cerrar</button>
                 </div>
             </div>
-        )
+        </div>
     );
 };

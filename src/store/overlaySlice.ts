@@ -3,6 +3,7 @@ import { PlayerSlice } from './playerSlice';
 
 export type OverlaySlice = {
     showPlayerOverlay: boolean;
+    showNameOverlay: boolean;
     showCountryOverlay: boolean;
     showLeagueOverlay: boolean;
     showTeamOverlay: boolean;
@@ -27,6 +28,7 @@ export type OverlaySlice = {
 
 export const createOverlaySlice: StateCreator<OverlaySlice & PlayerSlice, [], [], OverlaySlice> = (set, get) => ({
     showPlayerOverlay: true,
+    showNameOverlay: true,
     showCountryOverlay: true,
     showLeagueOverlay: true,
     showTeamOverlay: true,

@@ -1,10 +1,17 @@
 import { ImagesPlayer } from "../types";
 
+const shuffledPathsCache: { [key: string]: string[] } = {};
+
 export async function importAllImages(limit: number): Promise<ImagesPlayer> {
     const modules = import.meta.glob('../assets/fc-Image/*.{webp,jpg,jpeg,png}');
     const allPaths = Object.keys(modules);
-    const shuffledPaths = allPaths.sort(() => 0.5 - Math.random());
-    const selectedPaths = shuffledPaths.slice(0, limit);
+    const cacheKey = '../assets/fc-Image/*.{webp,jpg,jpeg,png}';
+
+    if (!shuffledPathsCache[cacheKey]) {
+        shuffledPathsCache[cacheKey] = allPaths.sort(() => 0.5 - Math.random());
+    }
+
+    const selectedPaths = shuffledPathsCache[cacheKey].slice(0, limit);
     const images: ImagesPlayer = [];
 
     for (const path of selectedPaths) {
