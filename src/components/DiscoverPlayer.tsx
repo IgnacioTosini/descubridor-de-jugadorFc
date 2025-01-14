@@ -7,7 +7,7 @@ import { Modal } from './Modal';
 import { Spinner } from "./Spinner/Spinner";
 
 export const DiscoverPlayer = () => {
-    const { playerImages, currentImageIndex, currentPage, showPlayerOverlay, showNameOverlay, showCountryOverlay, showLeagueOverlay, showTeamOverlay, showModal, points, loadImages } = useStore();
+    const { playerImages, currentImageIndex, currentPage, showPlayerOverlay, showNameOverlay, showCountryOverlay, showLeagueOverlay, showTeamOverlay, showModal, points, loadImages, isLoading } = useStore();
 
     useEffect(() => {
         loadImages(currentPage);
@@ -18,7 +18,9 @@ export const DiscoverPlayer = () => {
     return (
         <div className="flex justify-center items-center flex-col gap-4 shadow-lg w-4/5 max-w-[600px] p-8 rounded-lg">
             <div className="relative w-full">
-                {playerImages.length > 0 ? (
+                {isLoading ? (
+                    <Spinner />
+                ) : playerImages.length > 0 ? (
                     <div>
                         <p className="text-center mb-2">Jugadores restantes por descubrir: {uncoveredPlayersCount}</p>
                         <PlayerImage

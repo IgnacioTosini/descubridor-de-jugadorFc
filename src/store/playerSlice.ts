@@ -12,6 +12,7 @@ export type PlayerSlice = {
     totalPages: number;
     recentImages: string[]; // Historial de imágenes recientes
     isCorrectButtonDisabled: boolean;
+    isLoading: boolean; // Estado para controlar la visibilidad del Spinner
     loadImages: (page: number) => Promise<void>;
     showRandomImage: () => void;
     reloadImage: () => void;
@@ -28,6 +29,7 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
     totalPages: 0,
     recentImages: [],
     isCorrectButtonDisabled: false,
+    isLoading: false, // Inicializar el estado isLoading
     loadImages: async (page = 1) => {
         const images = await importAllImages(IMAGES_PER_PAGE * 5); // Cargar 5 páginas de imágenes aleatorias
         const parsedImages = ImagesSchema.parse(images);
@@ -127,8 +129,9 @@ export const createPlayerSlice: StateCreator<PlayerSlice & OverlaySlice, [], [],
 
         if (availableImages.length > 0) {
             const nextIndex = (currentImageIndex + 1) % playerImages.length;
+            set({ isLoading: true }); // Mostrar el Spinner
             setTimeout(() => {
-                set({ currentImageIndex: nextIndex, isCorrectButtonDisabled: playerImages[nextIndex].appearance });
+                set({ currentImageIndex: nextIndex, isCorrectButtonDisabled: playerImages[nextIndex].appearance, isLoading: false }); // Ocultar el Spinner
             }, 1500);
         } else {
             set({ isCorrectButtonDisabled: true });
