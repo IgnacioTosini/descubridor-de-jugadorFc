@@ -21,6 +21,7 @@ export const ShowHiddenPlayer = () => {
                         playerImages={playerImages}
                         currentImageIndex={currentImageIndex}
                         showPlayerOverlay={false}
+                        showNameOverlay={false}
                         showCountryOverlay={false}
                         showLeagueOverlay={false}
                         showTeamOverlay={false}
