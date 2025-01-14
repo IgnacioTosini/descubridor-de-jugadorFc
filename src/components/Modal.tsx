@@ -4,7 +4,7 @@ import { useStore } from '../store/useStore';
 type ModalProps = {
     showModal: boolean;
 }
-fun
+
 export const Modal = ({ showModal }: ModalProps) => {
     const { setShowModal } = useStore();
 
