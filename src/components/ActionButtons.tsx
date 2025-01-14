@@ -21,7 +21,7 @@ export const ActionButtons = () => {
             >Correcto
             </button>
             <button
-                className="mt-4 p-2 bg-blue-500 border-none rounded-md cursor-pointer transition-bg duration-300 text-white hover:bg-blue-600"
+                className="w-14 mt-4 p-2 bg-blue-500 border-none rounded-md cursor-pointer transition-bg duration-300 text-white hover:bg-blue-600"
                 onClick={reloadImage}
             ><img src={reload} alt="Cambiador" />
             </button>
